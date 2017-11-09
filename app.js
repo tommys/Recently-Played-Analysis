@@ -12,11 +12,9 @@ var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 
-var secrets = require('./secret.js');
-
-var client_id = secrets.client_id; // Your client id
-var client_secret = secrets.client_secret; // Your secret
-var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+var client_id = process.env.client_id; // Your client id
+var client_secret = process.env.client_secret; // Your secret
+var redirect_uri = 'https://spotify-recently-played.glitch.me/callback'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters

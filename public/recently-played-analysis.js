@@ -58,10 +58,10 @@ function getTrackAnalysis(tracks) {
         durations.push([index, track.duration_ms]);
         features.push([index, track.acousticness, track.danceability, track.energy, track.instrumentalness, track.liveness, track.speechiness, track.valence]);
 
-        if(track.instrumentalness > 0.5) {
+        if(track.instrumentalness > 0.7) {
             instrumentalCount++;
         }
-        if(track.acousticness > 0.5) {
+        if(track.acousticness > 0.7) {
             acousticCount++;
         }
         if(track.mode == 1) {

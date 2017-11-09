@@ -1,17 +1,16 @@
 {
-  "//1": "describes your app and its dependencies",
-  "//2": "https://docs.npmjs.com/files/package.json",
-  "//3": "updating this file will download and update your packages",
-
-  "name": "my-glitch-app",
+  "name": "recently-played-analysis",
   "version": "0.0.1",
-  "description": "What am I about?",
-  "main": "server.js",
+  "description": "Analysis of your recently played Spotify tracks",
+  "main": "app.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node app.js"
   },
   "dependencies": {
-    "express": "^4.16.2"
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.2",
+    "querystring": "^0.2.0",
+    "request": "^2.81.0"
   },
   "engines": {
     "node": "8.x"
