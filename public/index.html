@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Recently Played Analysis</title>
+    <style type="text/css">
+      body * {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+      .container {
+        margin: 3vw;
+      }
+      #login, #loggedin {
+        display: none;
+      }
+      .text-overflow {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 500px;
+      }
+      .row {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .row > * {
+        flex: 1;
+        /*width: 50%;*/
+      }
+      .bignumber {
+        color: #1ED760;
+        font-size: 80px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="login">
+        <h1>Log in to visualise your recently played tracks on Spotify</h1>
+        <a href="/login" class="btn btn-primary">Log in with Spotify</a>
+      </div>
+      <div id="loggedin">
+        <div id="rp-tracks">
+        </div>
+        <div id="rp-analysis">
+        </div>
+      </div>
+    </div>
+
+    <script id="rp-template" type="text/x-handlebars-template">
+      <div>
+        <h3>Recently played tracks:</h3>
+        {{#each items}}
+        <iframe src='https://embed.spotify.com/?uri={{track.uri}}' width="300" height="75" frameborder="0" allowtransparency="true"></iframe>
+        {{/each}}
+      </div>
+    </script>
+
+    <script id="rp-analysis-template" type="text/x-handlebars-template">
+      <div>
+        <h3>Recently played analysis:</h3>
+        <div class="row">
+          <div>
+            <h4>How you listened</h4>
+            <div id="context-pie"></div>
+          </div>
+          <div>
+            <h4>When you listened</h4>
+            <div id="playedat-timeline"></div>  
+          </div>
+        </div>
+        <h3>Audio Features of Your Recently Played Tracks</h3>
+        <div class="row">
+          <div>
+            <h5>Tempo</h5>
+            <div id="tempo-chart"></div>
+          </div>
+          <div>
+            <h5>Duration</h5>
+            <div id="duration-chart"></div>
+          </div>
+        </div>
+        <h5>Features</h5>
+        <div id="features-chart"></div>
+        <div id="mode-pie"></div>
+        <p>Instrumental: <div class="bignumber">{{counts.instrumental}}</div></p>
+        <p>Acoustic: <div class="bignumber">{{counts.acoustic}}</div></p>
+      </div>
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="./charts.js"></script>
+    <script src="./recently-played-analysis.js"></script>
+    <script>
+      (function() {
+        /**
+         * Obtains parameters from the hash of the URL
+         * @return Object
+         */
+        function getHashParams() {
+          var hashParams = {};
+          var e, r = /([^&;=]+)=?([^&;]*)/g,
+              q = window.location.hash.substring(1);
+          while ( e = r.exec(q)) {
+             hashParams[e[1]] = decodeURIComponent(e[2]);
+          }
+          return hashParams;
+        }
+        var recentlyPlayedSource = document.getElementById('rp-template').innerHTML,
+            recentlyPlayedTemplate = Handlebars.compile(recentlyPlayedSource),
+            recentlyPlayedPlaceholder = document.getElementById('rp-tracks');
+        var rpAnalysisSource = document.getElementById('rp-analysis-template').innerHTML,
+            rpAnalysisTemplate = Handlebars.compile(rpAnalysisSource),
+            rpAnalysisPlaceholder = document.getElementById('rp-analysis');
+        var params = getHashParams();
+        var access_token = params.access_token,
+            refresh_token = params.refresh_token,
+            error = params.error;
+        if (error) {
+          alert('There was an error during the authentication');
+        } else {
+          if (access_token) {
+            google.charts.load('current', {'packages':['corechart']});
+            $.ajax({
+                url: 'https://api.spotify.com/v1/me/player/recently-played?limit=20',
+                headers: {
+                  'Authorization': 'Bearer ' + access_token
+                },
+                success: function(response) {
+                  recentlyPlayedPlaceholder.innerHTML = recentlyPlayedTemplate(response);
+                  var recentlyPlayedAnalysis = getRecentlyPlayedAnalysis(response);
+
+                  var ids = "";
+                  response.items.forEach(function(item) {
+                    ids += item.track.id + ',';
+                  });
+
+                  ids = ids.slice(0, -1);
+
+                  $.ajax({
+                    url: 'https://api.spotify.com/v1/audio-features/?ids=' + ids,
+                    headers: {
+                      'Authorization': 'Bearer ' + access_token
+                    },
+                    success: function(response) {
+                      console.log(response);
+                      var trackAnalysis = getTrackAnalysis(response.audio_features);
+
+                      rpAnalysisPlaceholder.innerHTML = rpAnalysisTemplate(trackAnalysis);
+                      
+                      google.charts.setOnLoadCallback(drawCharts(recentlyPlayedAnalysis, trackAnalysis));
+
+                    }
+                  });
+
+                  $('#login').hide();
+                  $('#loggedin').show();
+                }
+            });
+          } else {
+              // render initial screen
+              $('#login').show();
+              $('#loggedin').hide();
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>
