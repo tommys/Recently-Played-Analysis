@@ -89,6 +89,7 @@ function drawCharts(recentlyPlayedAnalysis, trackAnalysis) {
     var options = {'title':'Features',
                     'width':'100%',
                     'height':400,
+                    'chartArea': {left: 0, width: '80%' },
                     'colors': colours};
 
     var chart = new google.visualization.ColumnChart(document.getElementById('features-chart'));
