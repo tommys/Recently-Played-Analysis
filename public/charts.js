@@ -86,10 +86,11 @@ function drawCharts(recentlyPlayedAnalysis, trackAnalysis) {
         trackAnalysis.features
     );
 
-    var options = {'title':'Features',
+    var options = {'title':'Audio Features',
                     'width':'100%',
                     'height':400,
-                    'chartArea': {left: 0, width: '80%' },
+                    'chartArea': {left: 0, width: '100%' },
+                    'legend': {position: 'bottom'},
                     'colors': colours};
 
     var chart = new google.visualization.ColumnChart(document.getElementById('features-chart'));
@@ -104,7 +105,7 @@ function drawCharts(recentlyPlayedAnalysis, trackAnalysis) {
         ['Minor', trackAnalysis.counts.mode[1]]
     ]);
 
-    var options = {'title':'Features',
+    var options = {'title':'Mode (major or minor key)',
                     'width':'100%',
                     'height':400,
                     'colors': colours};
