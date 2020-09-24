@@ -48,7 +48,6 @@
 
     <script id="rp-template" type="text/x-handlebars-template">
       <div>
-        <h3>Recently played tracks:</h3>
         {{#each items}}
         <iframe src='https://embed.spotify.com/?uri={{track.uri}}' width="300" height="75" frameborder="0" allowtransparency="true"></iframe>
         {{/each}}
@@ -56,35 +55,7 @@
     </script>
 
     <script id="rp-analysis-template" type="text/x-handlebars-template">
-      <div>
-        <h3>Recently played analysis:</h3>
-        <div class="row">
-          <div>
-            <h4>How you listened</h4>
-            <div id="context-pie"></div>
-          </div>
-          <div>
-            <h4>When you listened</h4>
-            <div id="playedat-timeline"></div>  
-          </div>
-        </div>
-        <h3>Audio Features of Your Recently Played Tracks</h3>
-        <div class="row">
-          <div>
-            <h5>Tempo</h5>
-            <div id="tempo-chart"></div>
-          </div>
-          <div>
-            <h5>Duration</h5>
-            <div id="duration-chart"></div>
-          </div>
-        </div>
-        <h5>Features</h5>
-        <div id="features-chart"></div>
-        <div id="mode-pie"></div>
-        <p>Instrumental: <div class="bignumber">{{counts.instrumental}}</div></p>
-        <p>Acoustic: <div class="bignumber">{{counts.acoustic}}</div></p>
-      </div>
+
     </script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>

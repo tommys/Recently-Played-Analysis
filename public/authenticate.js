@@ -27,7 +27,7 @@ if (error) {
   if (access_token) {
     google.charts.load('current', {'packages':['corechart']});
     $.ajax({
-        url: 'https://api.spotify.com/v1/me/player/recently-played?limit=20',
+        url: 'https://api.spotify.com/v1/me/player/recently-played?limit=50',
         headers: {
           'Authorization': 'Bearer ' + access_token
         },

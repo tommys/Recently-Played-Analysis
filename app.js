@@ -14,7 +14,7 @@ var cookieParser = require('cookie-parser');
 
 var client_id = process.env.client_id; // Your client id
 var client_secret = process.env.client_secret; // Your secret
-var redirect_uri = 'https://spotify-recently-played.glitch.me/callback'; // Your redirect uri
+var redirect_uri = 'https://tidy-fresh-cardboard.glitch.me/callback'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
