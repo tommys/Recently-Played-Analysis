@@ -14,9 +14,7 @@ function getHashParams() {
 var recentlyPlayedSource = document.getElementById('rp-template').innerHTML,
     recentlyPlayedTemplate = Handlebars.compile(recentlyPlayedSource),
     recentlyPlayedPlaceholder = document.getElementById('rp-tracks');
-var rpAnalysisSource = document.getElementById('rp-analysis-template').innerHTML,
-    rpAnalysisTemplate = Handlebars.compile(rpAnalysisSource),
-    rpAnalysisPlaceholder = document.getElementById('rp-analysis');
+
 var params = getHashParams();
 var access_token = params.access_token,
     refresh_token = params.refresh_token,
@@ -33,7 +31,7 @@ if (error) {
         },
         success: function(response) {
           recentlyPlayedPlaceholder.innerHTML = recentlyPlayedTemplate(response);
-          var recentlyPlayedAnalysis = getRecentlyPlayedAnalysis(response);
+ 
 
           var ids = "";
           response.items.forEach(function(item) {
@@ -53,8 +51,7 @@ if (error) {
 
               rpAnalysisPlaceholder.innerHTML = rpAnalysisTemplate(trackAnalysis);
 
-              google.charts.setOnLoadCallback(drawCharts(recentlyPlayedAnalysis, trackAnalysis));
-
+          
             }
           });
 
